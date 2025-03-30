@@ -8,7 +8,7 @@ executors:
 
 jobs:
   build-test-project:
-    executors: docker-executor
+    executor: docker-executor
     steps:
       - checkout
       - run:
@@ -29,8 +29,8 @@ jobs:
             - bash.env
 
   test-test-project:
-    executors: docker-executor
-    working-directory: ./test-project
+    executor: docker-executor
+    working_directory: ./test-project
     steps:
       - checkout
       - attach_workspace:
@@ -49,17 +49,14 @@ jobs:
             npx eslint --config ./eslint-configs/eslint.default.mjs .
 
 workflows:
-  build-project:
+  project-test:
     jobs:
-      - build-test-project:
-  test-project:
-    jobs:
+      - build-test-project
       - test-test-project:
           requires:
-            - build-project
+            - build-test-project
 
-
-  #     matrix:
+              #     matrix:
   #       config: [
   #         # non-legacy configurations correspond to examples in README
   #         default,
