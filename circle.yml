@@ -32,7 +32,8 @@ jobs:
     executor: docker-executor
     working_directory: ./test-project
     steps:
-      - checkout
+      - checkout:
+          path: ../
       - attach_workspace:
           at: .
       - run:
