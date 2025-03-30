@@ -42,7 +42,15 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            npm install ./eslint-plugin-cypress-$PLUGIN_VERSION.tgz -D
+            npm install eslint@9 ./eslint-plugin-cypress-$PLUGIN_VERSION.tgz -D
+      - run:
+          name: Display ESLint version
+          command: |
+            npx eslint --version
+      - run:
+          command: |
+            pwd
+            ls -al
       - run:
           name: lint with example
           command: |
