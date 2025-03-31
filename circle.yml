@@ -29,6 +29,16 @@ jobs:
             - bash.env
 
   test-test-project:
+    description: Run ESLint with different configurations
+    parameters:
+      eslint-version:
+        description: Version of ESLint to use
+        default: 'latest'
+        type: string
+      config-file:
+        description: Configuration file
+        default: 'default'
+        type: string
     executor: docker-executor
     working_directory: ./test-project
     steps:
@@ -43,7 +53,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            npm install eslint@9 ./eslint-plugin-cypress-$PLUGIN_VERSION.tgz -D
+            npm install eslint@<< parameters.eslint-version>> ./eslint-plugin-cypress-$PLUGIN_VERSION.tgz -D
       - run:
           name: Display ESLint version
           command: |
@@ -55,13 +65,15 @@ jobs:
       - run:
           name: lint with example
           command: |
-            npx eslint --config ./eslint-configs/eslint.default.mjs .
+            npx eslint --config ./eslint-configs/eslint.<< parameters.config-file >>.mjs .
 
 workflows:
   project-test:
     jobs:
       - build-test-project
       - test-test-project:
+          eslint-version: '9'
+          config-file: default
           requires:
             - build-test-project
 
