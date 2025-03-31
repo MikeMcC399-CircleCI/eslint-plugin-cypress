@@ -59,10 +59,6 @@ jobs:
           command: |
             npx eslint --version
       - run:
-          command: |
-            pwd
-            ls -al
-      - run:
           name: lint with example
           command: |
             npx eslint --config ./eslint-configs/eslint.<< parameters.config-file >>.mjs .
