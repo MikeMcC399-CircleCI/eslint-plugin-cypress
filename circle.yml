@@ -58,10 +58,17 @@ jobs:
           name: Display ESLint version
           command: |
             npx eslint --version
-      - run:
-          name: lint with example
-          command: |
-            npx eslint --config ./eslint-configs/eslint.<< parameters.config-file >>.mjs .
+      - when: # current configuration
+          condition:
+            not: << parameters.config-file >> starts-with 'legacy'
+          steps:
+            - run: npx eslint --config ./eslint-configs/eslint.<< parameters.config-file >>.mjs .
+      - when: # legacy configuration
+          condition: << parameters.config-file >> starts-with 'legacy'
+          steps:
+            - run: export ESLINT_USE_FLAT_CONFIG=false
+            - run: npx eslint --config ./eslint-configs/<< parameters.config-file >>.json .
+
 
 workflows:
   project-test:
