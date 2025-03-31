@@ -68,8 +68,10 @@ workflows:
     jobs:
       - build-test-project
       - test-test-project:
-          eslint-version: '9'
-          config-file: default
+          matrix:
+            parameters:
+              eslint-version: ['9']
+              config-file: [default, recommended, globals]
           requires:
             - build-test-project
 
