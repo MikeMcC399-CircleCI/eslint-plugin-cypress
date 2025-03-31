@@ -60,12 +60,14 @@ jobs:
             npx eslint --version
       - when: # current configuration
           condition:
-            not: << parameters.config-file >> starts-with 'legacy'
+            not: << parameters.config-file >> starts-with "legacy"
           steps:
+            - run: echo Testing a << parameters.config-file >> configuration
             - run: npx eslint --config ./eslint-configs/eslint.<< parameters.config-file >>.mjs .
       - when: # legacy configuration
-          condition: << parameters.config-file >> starts-with 'legacy'
+          condition: << parameters.config-file >> starts-with "legacy"
           steps:
+            - run: echo Testing a legacy configuration << parameters.config-file >>
             - run: export ESLINT_USE_FLAT_CONFIG=false
             - run: npx eslint --config ./eslint-configs/<< parameters.config-file >>.json .
 
@@ -78,7 +80,15 @@ workflows:
           matrix:
             parameters:
               eslint-version: ['9']
-              config-file: [default, recommended, globals]
+              config-file: [
+                # non-legacy configurations correspond to examples in README
+                'default',
+                'recommended',
+                'globals',
+                # legacy configuration are adapted from README examples
+                'legacy/.eslintrc.custom',
+                'legacy/.eslintrc.recommended',
+                ]
           requires:
             - build-test-project
 
