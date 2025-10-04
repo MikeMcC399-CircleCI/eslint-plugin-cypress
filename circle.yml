@@ -23,7 +23,6 @@ workflows:
               config-file:
                 # configurations correspond to examples in README
                 - 'globals'
-                - 'one-rule-deprecated' # using deprecated /flat
                 - 'one-rule'
                 - 'recommended'
           requires:
