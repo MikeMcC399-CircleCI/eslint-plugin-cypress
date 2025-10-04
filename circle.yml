@@ -11,12 +11,15 @@ workflows:
     jobs:
       - lint
       - test-v9
+      # - test-v10
 
       - build-test-project
       - test-test-project:
           matrix:
             parameters:
-              eslint-version: ['9']
+              eslint-version:
+                - '9'
+                # - '10'
               config-file:
                 # configurations correspond to examples in README
                 - 'globals'
@@ -30,6 +33,7 @@ workflows:
           requires:
             - lint
             - test-v9
+            # - test-v10
             - test-test-project
           filters:
             branches:
@@ -70,6 +74,23 @@ jobs:
       - run:
           name: Test ESLint 9
           command: npm test
+
+  # test-v10:
+  #   executor: docker-executor
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install dependencies
+  #         command: npm ci
+  #     - run:
+  #         name: Install ESLint 10
+  #         command: npm install eslint@10
+  #     - run:
+  #         name: Show ESLint version
+  #         command: npx eslint --version
+  #     - run:
+  #         name: Test ESLint 10
+  #         command: npm test
 
   build-test-project:
     executor: docker-executor
