@@ -8,7 +8,7 @@ import tseslint from 'typescript-eslint'
 
 export default defineConfig([
 
-  globalIgnores(['test-project/**/*', '!test-project/**/eslint*']),
+  globalIgnores(['test-project/**/*']),
 
   {
     files: ['**/*.{,m}js'],
