@@ -11,12 +11,15 @@ workflows:
     jobs:
       - lint
       - test-v9
+      - test-v10
 
       - build-test-project
       - test-test-project:
           matrix:
             parameters:
-              eslint-version: ['9']
+              eslint-version:
+                - '9'
+                - 'next'
               config-file:
                 # configurations correspond to examples in README
                 - 'globals'
@@ -25,16 +28,17 @@ workflows:
                 - 'recommended'
           requires:
             - build-test-project
-      - release:
-          context: org-npm-credentials
-          requires:
-            - lint
-            - test-v9
-            - test-test-project
-          filters:
-            branches:
-              only:
-                - master
+      # - release:
+      #     context: org-npm-credentials
+      #     requires:
+      #       - lint
+      #       - test-v9
+      #       - test-v10
+      #       - test-test-project
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
 
 jobs:
   lint:
@@ -69,6 +73,23 @@ jobs:
           command: npx eslint --version
       - run:
           name: Test ESLint 9
+          command: npm test
+
+  test-v10:
+    executor: docker-executor
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Install ESLint 10
+          command: npm install eslint@next
+      - run:
+          name: Show ESLint version
+          command: npx eslint --version
+      - run:
+          name: Test ESLint 10
           command: npm test
 
   build-test-project:
@@ -128,13 +149,13 @@ jobs:
           command: |
             npx eslint --config ./eslint-configs/eslint.<< parameters.config-file >>.mjs .
 
-  release:
-    executor: docker-executor
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: npm ci
-      - run:
-          name: Run semantic release
-          command: npm run semantic-release
+  # release:
+  #   executor: docker-executor
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install dependencies
+  #         command: npm ci
+  #     - run:
+  #         name: Run semantic release
+  #         command: npm run semantic-release
