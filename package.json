@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/cypress-io/eslint-plugin-cypress#readme",
   "peerDependencies": {
-    "eslint": ">=9"
+    "eslint": ">=9 || >=10.0.0-0"
   },
   "dependencies": {
     "globals": "^16.2.0"
