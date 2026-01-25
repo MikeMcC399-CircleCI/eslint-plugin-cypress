@@ -3,7 +3,7 @@ version: 2.1
 executors:
   docker-executor:
     docker:
-      - image: cimg/node:24.11.0
+      - image: cimg/node:24.13.0
     resource_class: medium
 
 workflows:
@@ -19,7 +19,7 @@ workflows:
             parameters:
               eslint-version:
                 - '9'
-                - 'next'
+                - '^10.0.0-0'
               config-file:
                 # configurations correspond to examples in README
                 - 'globals'
@@ -28,17 +28,17 @@ workflows:
                 - 'recommended'
           requires:
             - build-test-project
-      # - release:
-      #     context: org-npm-credentials
-      #     requires:
-      #       - lint
-      #       - test-v9
-      #       - test-v10
-      #       - test-test-project
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
+      - release:
+          context: org-npm-credentials
+          requires:
+            - lint
+            - test-v9
+            - test-v10
+            - test-test-project
+          filters:
+            branches:
+              only:
+                - master
 
 jobs:
   lint:
@@ -84,7 +84,7 @@ jobs:
           command: npm ci
       - run:
           name: Install ESLint 10
-          command: npm install eslint@next
+          command: npm install eslint@^10.0.0-0
       - run:
           name: Show ESLint version
           command: npx eslint --version
@@ -149,13 +149,13 @@ jobs:
           command: |
             npx eslint --config ./eslint-configs/eslint.<< parameters.config-file >>.mjs .
 
-  # release:
-  #   executor: docker-executor
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Install dependencies
-  #         command: npm ci
-  #     - run:
-  #         name: Run semantic release
-  #         command: npm run semantic-release
+  release:
+    executor: docker-executor
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Run semantic release
+          command: npm run semantic-release
