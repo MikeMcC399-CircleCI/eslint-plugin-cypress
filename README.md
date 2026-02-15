@@ -20,7 +20,9 @@ yarn add eslint eslint-plugin-cypress --dev
 
 ## Usage
 
-ESLint `v9` and `v10` use a [Flat config file](https://eslint.org/docs/latest/use/configure/configuration-files) format with filename `eslint.config.*js` by default. This plugin no longer supports the use of a deprecated [eslintrc-type](https://eslint.org/docs/latest/use/configure/configuration-files-deprecated) config file from previous ESLint versions.
+ESLint as of `v10` and this plugin no longer support the use of the deprecated [eslintrc-type](https://eslint.org/docs/v9.x/use/configure/configuration-files-deprecated) config file format.
+You must use a [Flat config file](https://eslint.org/docs/latest/use/configure/configuration-files) format.
+This is the default in ESLint `v9`, and in ESLint `v10` it is the only config format available.
 
 To set up a configuration, add a file `eslint.config.mjs` to the root directory of your Cypress project and include the following instructions to import the available configurations using:
 
@@ -28,11 +30,10 @@ To set up a configuration, add a file `eslint.config.mjs` to the root directory 
 import pluginCypress from 'eslint-plugin-cypress'
 ```
 
-For backwards compatibility with previous plugin versions `3.3.0` - `4.3.0`, the following equivalent deprecated form is also supported. This is planned to be removed in a future major version:
+The configuration `eslint-plugin-cypress/flat`, which was deprecated in plugin version `5.0.0`, is no longer available.
+Migrate to using the equivalent configuration `eslint-plugin-cypress` by dropping the `/flat` suffix.
 
-```shell
-import pluginCypress from 'eslint-plugin-cypress/flat' # deprecated
-```
+Refer to ESLint `v10` [Configuration File Resolution](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-file-resolution) for hierachical use of configuration files.
 
 ## Configurations
 
@@ -190,7 +191,7 @@ During test spec development, [Mocha exclusive tests](https://mochajs.org/#exclu
 
 ### Cypress and Mocha recommended
 
-[eslint-plugin-mocha@^11](https://www.npmjs.com/package/eslint-plugin-mocha) is added to the example [Cypress recommended](#cypress-recommended). This version of the plugin supports only flat file configurations with the option `configs.recommended`.
+[eslint-plugin-mocha@^11](https://www.npmjs.com/package/eslint-plugin-mocha) is added to the example [Cypress recommended](#cypress-recommended).
 
 The settings for individual `mocha` rules from the `configs.recommended` option are changed.
 
